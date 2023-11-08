@@ -1,3 +1,4 @@
+.idea
 node_modules
 public/js
 out
@@ -7,3 +8,4 @@ out
 yarn-error.log
 report.html
 .lsp
+.env

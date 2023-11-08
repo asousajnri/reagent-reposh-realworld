@@ -12,10 +12,6 @@
 (defonce submitting-state (r/atom false))
 (defonce error-state (r/atom nil))
 
-(comment
-  @current-article-state)
-(comment
-  @articles-state)
 (defn handler [response]
   (reset! loading-state false)
   (reset! articles-state response))
@@ -32,16 +28,9 @@
         :response-format (json-response-format {:keywords? true})
         :error-handler error-handler}))
 
-(comment
-  (articles-browse)
-  (first (:articles (deref articles-state))))
-
-;; const limit = (count, p) => `limit=${count}&offset=${p ? p * count : 0}`;
 (defn limit [total page]
   (str "limit=" total "&offset=" (or (* page total) 0)))
-;;
-(comment
-  (limit 5 0))
+
 (defn articles-feed []
   (reset! loading-state true)
   (GET (str api-uri "/articles/feed?limit=10&offset=0")
@@ -50,7 +39,6 @@
         :response-format (json-response-format {:keywords? true})
         :error-handler error-handler}))
 
-;;
 (defn fetch-by
   ([author] (fetch-by author 0))
   ([author page]
@@ -61,9 +49,6 @@
          :response-format (json-response-format {:keywords? true})
          :error-handler error-handler})))
 
-(comment
-  (fetch-by "learnuidev2@gmail.com" 0))
-
 (defn favourited-by [author page]
   (reset! loading-state true)
   (GET (str api-uri "/articles?favorited=" (js/encodeURIComponent author) "&" (limit 5 page))
@@ -72,10 +57,6 @@
         :response-format (json-response-format {:keywords? true})
         :error-handler error-handler}))
 
-(comment
-  (favourited-by "learnuidev2@gmail.com" 0))
-
-;;
 (defn articles-by-tag [tag]
   (reset! loading-state true)
   (GET (str api-uri "/articles?" (limit 10 0) "&tag=" tag)
@@ -83,11 +64,6 @@
         :error-handler error-handler
         :headers (get-auth-header)
         :response-format (json-response-format {:keywords? true})}))
-
-(comment
-  (articles-by-tag @tag-state))
-
-;; add new article
 
 (defn create-success! [{:keys [article]}]
   (reset! submitting-state false)
@@ -121,13 +97,6 @@
         :headers (get-auth-header)
         :response-format (json-response-format {:keywords? true})}))
 
-(comment
-  @error-state
-  @current-article-state)
-(comment
-  (fetch "Demo-article-3")
-  (fetch "blablabla"))
-
 (defn delete-success! [resp]
   (rfe/push-state :routes/home))
 
@@ -159,9 +128,6 @@
   (reset! submitting-state false)
   (swap! articles-state assoc :articles (map #(update-article % article) (:articles @articles-state))))
 
-(comment
-  (:articles @articles-state))
-;; favourites
 (defn favourite-article! [article]
   (reset! submitting-state true)
   (POST (str api-uri "/articles/" (:slug article) "/favorite")
@@ -172,9 +138,6 @@
          :format (json-request-format)
          :response-format (json-response-format {:keywords? true})}))
 
-(comment
-  (favourite-article! @current-article-state))
-
 (defn unfavourite-article! [article]
   (reset! submitting-state true)
   (DELETE (str api-uri "/articles/" (:slug article) "/favorite")
@@ -184,7 +147,3 @@
            :headers (get-auth-header)
            :format (json-request-format)
            :response-format (json-response-format {:keywords? true})}))
-
-;;
-(comment
-  (unfavourite-article! @current-article-state))

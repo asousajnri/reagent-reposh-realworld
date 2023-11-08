@@ -69,8 +69,4 @@
    [:div.col-md-6.offset-md-3.col-xs-12
     [:h1.text-xs-center "Your Settings"]
     (when @auth-state
-      [settings-form @auth-state])
-    [:hr]
-    [:button.btn.btn-outline-danger
-     {:on-click logout}
-     "Or click here to logout."]]])
+      [settings-form @auth-state])]])

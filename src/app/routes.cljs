@@ -25,8 +25,6 @@
 
 (defonce temp (atom nil))
 
-(comment
-  @temp)
 (def routes
   [["/"         {:name :routes/home
                  :view #'home-page
@@ -95,9 +93,6 @@
                           :stop (fn []
                                   (reset! profile/tab-state :author)
                                   (reset! profile/profile-state nil))}]}]])
-
-(comment "takes route name and generates the route path, nil if not found"
-         (rfe/href ::login))
 
 (defn router-start! []
   (rfe/start!

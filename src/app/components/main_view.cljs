@@ -1,7 +1,13 @@
 (ns app.components.main-view
   (:require
-   [app.articles :refer [articles-state tab-state tag-state loading-state articles-feed articles-browse]]
+   [app.articles :refer [articles-state
+                         tab-state
+                         tag-state
+                         loading-state
+                         articles-feed
+                         articles-browse]]
    [app.components.articles :refer [articles]]
+   [app.api :refer [get-token]]
    [reagent.core :as r]))
 
 (defn handle-feed []
@@ -17,10 +23,11 @@
 (defn feed-toggle []
   [:div.feed-toggle
    [:ul.nav.nav-pills.outline-active
-    [:li.nav-item
-     [:a {:class ["nav-link" (when (= @tab-state :feed) "active")]
-          :on-click handle-feed}
-      "Your Feed"]]
+    (when (get-token)
+      [:li.nav-item
+       [:a {:class ["nav-link" (when (= @tab-state :feed) "active")]
+            :on-click handle-feed}
+        "Your Feed"]])
     [:li.nav-item
      [:a {:class ["nav-link" (when (= @tab-state :all) "active")]
           :on-click handle-all}

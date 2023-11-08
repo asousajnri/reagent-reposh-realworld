@@ -5,8 +5,6 @@
    ;; components
    [app.components.header :refer [header]]))
 
-(comment
-  @routes-state)
 (defn app []
   [:div
    [header @auth-state]
